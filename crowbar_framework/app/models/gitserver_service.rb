@@ -15,8 +15,6 @@
 # 
 
 class GitserverService < ServiceObject
-  class ServiceError < StandardError
-  end
 
   def initialize(thelogger)
     @bc_name = "gitserver"
@@ -29,8 +27,8 @@ class GitserverService < ServiceObject
     base = super
     @logger.debug("Gitserver create_proposal: leaving base part")
 
-    nodes = NodeObject.find()
-    nodes.delete_if { |n| n.nil? or n.admin? }
+    nodes = NodeObject.all
+    nodes.delete_if { |n| n.nil? }
     unless nodes.empty?
       base["deployment"]["gitserver"]["elements"] = {
         "gitserver" => [ nodes.first.name ]

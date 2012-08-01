@@ -18,3 +18,79 @@
 # limitations under the License.
 #
 
+git_username = "git"
+home_dir = "/home/#{git_username}"
+dst_dir = "/tmp"
+
+user git_username do
+  comment "Git user"
+  home home_dir
+  shell "/usr/bin/git-shell"
+end
+
+directory home_dir do
+  owner git_username
+  group git_username
+end
+
+directory "#{home_dir}/.ssh" do
+  owner git_username
+  group git_username
+end
+
+ssh_keys = []
+
+all_nodes = search(:node, "*:*")
+all_nodes.each do |a_node|
+  ssh_keys << a_node.normal[:crowbar][:ssh][:root_pub_key]
+end
+
+template "#{home_dir}/.ssh/authorized_keys" do
+  source "authorized_keys.erb"
+  owner git_username
+  variables :key_list => ssh_keys
+end
+
+node[:repo_data] = {}
+node[:repos].each do |bc,repos_arr|
+  node[:repo_data][bc] = []
+  repos = []
+  repos_arr.each {|repo| repos << repo.split("\n")}
+  repos.flatten.each do |repo|
+    repo_url, repo_name = repo.split
+    node[:repo_data][bc] << { repo_name => repo_url}
+  end
+end
+
+provisioner = search(:node, "roles:provisioner-server").first
+proxy_addr = provisioner[:fqdn]
+proxy_port = provisioner[:provisioner][:web_port]
+
+node[:repo_data].each do |bc, repos|
+  repos.each do |repo|
+    repo.each do |repo_name, repo_url|
+      file_url = "http://#{proxy_addr}:#{proxy_port}/git_repos/#{bc}/#{repo_name}.tar.bz2"
+      file_path = "#{dst_dir}/#{bc}/#{repo_name}.tar.bz2"
+      directory "#{dst_dir}/#{bc}" do
+        owner git_username
+      end
+      remote_file file_url do
+        source file_url
+        path file_path
+        owner git_username
+        action :create_if_missing
+      end
+      directory "#{home_dir}/#{bc}" do
+        owner git_username
+        group git_username
+      end
+      execute "untar_#{repo_name}.tar.bz2" do
+       cwd "#{home_dir}/#{bc}"
+       user git_username
+       command "tar xf #{file_path}"
+       creates "#{home_dir}/#{bc}/#{repo_name}.git"
+      end
+    end
+  end
+end
+

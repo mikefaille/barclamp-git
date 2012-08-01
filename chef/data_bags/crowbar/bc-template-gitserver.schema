@@ -8,6 +8,13 @@
       "type": "map",
       "required": true,
       "mapping": {
+        "gitserver": {
+          "type": "map",
+          "required": true,
+          "mapping": {
+            "foo": { "type": "str", "required": true }
+          }
+        }
       }
     },
     "deployment": {
