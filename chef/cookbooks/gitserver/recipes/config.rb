@@ -71,6 +71,7 @@ node[:repo_data].each do |bc, repos|
     repo.each do |repo_name, repo_url|
       file_url = "http://#{proxy_addr}:#{proxy_port}/git_repos/#{bc}/#{repo_name}.tar.bz2"
       file_path = "#{dst_dir}/#{bc}/#{repo_name}.tar.bz2"
+      repo_dir = "#{home_dir}/#{bc}/#{repo_name}.git"
       directory "#{dst_dir}/#{bc}" do
         owner git_username
       end
@@ -88,7 +89,25 @@ node[:repo_data].each do |bc, repos|
        cwd "#{home_dir}/#{bc}"
        user git_username
        command "tar xf #{file_path}"
-       creates "#{home_dir}/#{bc}/#{repo_name}.git"
+       creates repo_dir 
+      end
+      execute "git_fetch_#{repo_url}" do
+        command "git fetch origin"
+        cwd repo_dir
+        user git_username
+        only_if do
+          require 'ping'
+          if repo_url.include?('@')
+            repo_host = repo_url.split('@')[1].split(':').first
+          else
+            repo_host = repo_url.split('/')[2]
+          end
+          begin
+            Ping.pingecho repo_host, 5
+          rescue Exception => msg
+            false
+          end
+        end
       end
     end
   end
