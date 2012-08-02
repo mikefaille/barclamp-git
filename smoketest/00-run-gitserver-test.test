@@ -25,6 +25,16 @@ root_do() {
     run_on "$address" sudo -u root -i "$@"
 }
 
-echo "Gitserver smoketest is not functional now..."
+echo "Smoketesting Gitserver smoketest now..."
+echo "Finding Git server..."
+gitserver_ip=$(knife_node_find 'roles:gitserver' FQDN)
+if ! [[ $gitserver_ip ]]; then
+    echo "Could not find Git server."
+    exit 1
+fi
+echo "Git server at $gitserver_ip. Verifying test git repo..."
 
-exit 0
+apt-get -y install git
+git clone git@$gitserver_ip:gitserver/gitserver.git
+
+exit $?
