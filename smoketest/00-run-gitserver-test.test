@@ -27,14 +27,21 @@ root_do() {
 
 echo "Smoketesting Gitserver smoketest now..."
 echo "Finding Git server..."
-gitserver_ip=$(knife_node_find 'roles:gitserver' FQDN)
+gitserver_ip=$(knife_node_find 'roles:gitserver' IP)
 if ! [[ $gitserver_ip ]]; then
     echo "Could not find Git server."
     exit 1
 fi
 echo "Git server at $gitserver_ip. Verifying test git repo..."
-
-apt-get -y install git
-git clone git@$gitserver_ip:gitserver/gitserver.git
+echo "Finding Crowbar..."
+crowbar_ip=$(knife_node_find 'roles:crowbar' IP)
+if ! [[ $crowbar_ip ]]; then
+    echo "Could not find Crowbar server."
+    exit 1
+fi
+echo "Crowbar at $crowbar_ip. Verifying test git repo..."
+root_do $crowbar_ip apt-get -y install git
+echo "Trying to clone test git repo..."
+root_do $crowbar_ip git clone git@$gitserver_ip:gitserver/gitserver.git
 
 exit $?
