@@ -40,7 +40,7 @@ if ! [[ $crowbar_ip ]]; then
     exit 1
 fi
 echo "Crowbar at $crowbar_ip. Verifying test git repo..."
-root_do $crowbar_ip apt-get -y install git
+root_do $crowbar_ip DEBIAN_FRONTEND=noninteractive apt-get -y install git
 echo "Trying to clone test git repo..."
 root_do $crowbar_ip git clone git@$gitserver_ip:gitserver/gitserver.git
 
