@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: gitserver
+# Cookbook Name:: git
 # Recipe:: install
 #
 # Copyright 2011, Dell, Inc.

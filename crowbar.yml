@@ -13,11 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# Author: RobHirschfeld
 
 barclamp:
-  name: gitserver 
-  display: Gitserver
+  name: git 
+  display: Git
   version: 0
   member:
     - crowbar
@@ -31,7 +30,7 @@ crowbar:
 locale_additions:
   en:
     barclamp:
-      gitserver:
+      git:
         edit_attributes:
           attributes: Attributes
         edit_deployment:
@@ -43,4 +42,4 @@ debs:
 
 git_repos:
   # this repo is for smoketests only
-  - https://github.com/MirantisDellCrowbar/barclamp-gitserver.git gitserver
+  - https://github.com/MirantisDellCrowbar/barclamp-git.git git

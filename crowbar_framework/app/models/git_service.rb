@@ -14,28 +14,28 @@
 # limitations under the License. 
 # 
 
-class GitserverService < ServiceObject
+class GitService < ServiceObject
 
   def initialize(thelogger)
-    @bc_name = "gitserver"
+    @bc_name = "git"
     @logger = thelogger
   end
 
   def create_proposal
     # TODO: ensure that only one proposal can be applied to a node
-    @logger.debug("Gitserver create_proposal: entering")
+    @logger.debug("Git create_proposal: entering")
     base = super
-    @logger.debug("Gitserver create_proposal: leaving base part")
+    @logger.debug("Git create_proposal: leaving base part")
 
     nodes = NodeObject.all
     nodes.delete_if { |n| n.nil? }
     unless nodes.empty?
-      base["deployment"]["gitserver"]["elements"] = {
-        "gitserver" => [ nodes.first.name ]
+      base["deployment"]["git"]["elements"] = {
+        "git" => [ nodes.first.name ]
       }
     end
 
-    @logger.debug("Gitserver create_proposal: exiting")
+    @logger.debug("Git create_proposal: exiting")
     base
   end
 

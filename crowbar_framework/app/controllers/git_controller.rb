@@ -14,9 +14,9 @@
 # limitations under the License. 
 # 
 
-class GitserverController < BarclampController
+class GitController < BarclampController
   def initialize
-    @service_object = GitserverService.new logger
+    @service_object = GitService.new logger
   end
 
 end

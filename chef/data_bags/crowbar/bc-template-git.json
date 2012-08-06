@@ -1,23 +1,23 @@
 {
-  "id": "bc-template-gitserver",
-  "description": "provides a gitserver installation",
+  "id": "bc-template-git",
+  "description": "provides a git installation",
   "attributes": {
-    "gitserver": {
+    "git": {
       "foo": "bar"
     }
   },
   "deployment": {
-    "gitserver": {
+    "git": {
       "crowbar-revision": 0,
       "element_states": {
-        "gitserver": [ "readying", "ready", "applying" ]
+        "git": [ "readying", "ready", "applying" ]
       },
       "elements": {},
       "element_order": [
-        [ "gitserver" ]
+        [ "git" ]
       ],
       "config": {
-        "environment": "gitserver-base-config",
+        "environment": "git-base-config",
         "mode": "full",
         "transitions": false,
         "transition_list": []

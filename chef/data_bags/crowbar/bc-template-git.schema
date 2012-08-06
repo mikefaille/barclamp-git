@@ -2,13 +2,13 @@
   "type": "map",
   "required": true,
   "mapping": {
-    "id": { "type": "str", "required": true, "pattern": "/^bc-gitserver-|^bc-template-gitserver$/" },
+    "id": { "type": "str", "required": true, "pattern": "/^bc-git-|^bc-template-git$/" },
     "description": { "type": "str", "required": true },
     "attributes": {
       "type": "map",
       "required": true,
       "mapping": {
-        "gitserver": {
+        "git": {
           "type": "map",
           "required": true,
           "mapping": {
@@ -21,7 +21,7 @@
       "type": "map",
       "required": true,
       "mapping": {
-        "gitserver": {
+        "git": {
           "type": "map",
           "required": true,
           "mapping": {

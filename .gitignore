@@ -1,1 +1,1 @@
-chef/cookbooks/gitserver/attributes/default.rb
+chef/cookbooks/git/attributes/default.rb
