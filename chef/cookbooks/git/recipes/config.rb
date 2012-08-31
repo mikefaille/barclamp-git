@@ -42,7 +42,10 @@ ssh_keys = []
 
 all_nodes = search(:node, "*:*")
 all_nodes.each do |a_node|
-  ssh_keys << a_node.normal[:crowbar][:ssh][:root_pub_key]
+  #agordeev: This is work around to avoid inconsistency
+  # among node[:crowbar][:ssh][:root_pub_key] attributes
+  # but it works only if git be deployed on admin node
+  ssh_keys << %x{ssh root@#{a_node[:fqdn]} cat /root/.ssh/id_rsa.pub}.strip
 end
 
 template "#{home_dir}/.ssh/authorized_keys" do

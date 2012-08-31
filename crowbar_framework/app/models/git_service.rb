@@ -28,7 +28,7 @@ class GitService < ServiceObject
     @logger.debug("Git create_proposal: leaving base part")
 
     nodes = NodeObject.all
-    nodes.delete_if { |n| n.nil? }
+    nodes.delete_if { |n| not n.admin? }
     unless nodes.empty?
       base["deployment"]["git"]["elements"] = {
         "git" => [ nodes.first.name ]
