@@ -39,6 +39,8 @@ locale_additions:
 debs:
   pkgs:
     - git
+    - python-setuptools
+    - python-pip
 
 git_repos:
   # this repo is for smoketests only
