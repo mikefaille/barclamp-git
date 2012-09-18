@@ -35,6 +35,12 @@ locale_additions:
           attributes: Attributes
         edit_deployment:
           deployment: Deployment
+        pfsdeps:
+          gitrepo: Git repo url
+          git_refspec: refspec (branch, tag, commit, etc.)
+          use_gitbarclamp: Use barclamp git for pull from source
+          use_gitrepo: Use pull from source
+          deps: Pull from source dependencies list sepatared by a semicolon
 
 debs:
   pkgs:
@@ -44,4 +50,4 @@ debs:
 
 git_repos:
   # this repo is for smoketests only
-  - https://github.com/MirantisDellCrowbar/barclamp-git.git git
+  - http://github.com/MirantisDellCrowbar/barclamp-git.git git
