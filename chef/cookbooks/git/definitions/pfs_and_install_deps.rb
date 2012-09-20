@@ -21,6 +21,14 @@ define :pfs_and_install_deps, :action => :create do
     command "echo > #{install_path}/tools/pip-requires"
     only_if {File.exists? "#{install_path}/tools/pip-requires"}
   end
+  unless params[:without_setup]
+    comp_name = "horizon" if comp_name == "nova_dashboard"
+    execute "setup_#{comp_name}" do
+      cwd install_path
+      command "python setup.py develop"
+      creates "#{install_path}/#{comp_name}.egg-info"
+    end
+  end
   if node[comp_name]
     unless node[comp_name][:pfs_deps].nil?
       node[comp_name][:pfs_deps].each do |pkg|
@@ -36,14 +44,6 @@ define :pfs_and_install_deps, :action => :create do
            end
         end
       end
-    end
-  end
-  unless params[:without_setup]
-    comp_name = "horizon" if comp_name == "nova_dashboard"
-    execute "setup_#{comp_name}" do
-      cwd install_path
-      command "python setup.py develop"
-      creates "#{install_path}/#{comp_name}.egg-info"
     end
   end
 end
