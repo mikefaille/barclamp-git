@@ -22,11 +22,10 @@ define :pfs_and_install_deps, :action => :create do
     only_if {File.exists? "#{install_path}/tools/pip-requires"}
   end
   unless params[:without_setup]
-    comp_name = "horizon" if comp_name == "nova_dashboard"
     execute "setup_#{comp_name}" do
       cwd install_path
       command "python setup.py develop"
-      creates "#{install_path}/#{comp_name}.egg-info"
+      creates "#{install_path}/#{comp_name == "nova_dashboard" ? "horizon":comp_name}.egg-info"
     end
   end
   if node[comp_name]
