@@ -47,6 +47,10 @@ debs:
     - git
     - python-setuptools
     - python-pip
+  ubuntu-12.04:
+    build_pkgs:
+      - ruby
+    build_cmd: build.sh
 
 git_repos:
   # this repo is for smoketests only

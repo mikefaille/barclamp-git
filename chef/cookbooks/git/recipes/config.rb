@@ -54,17 +54,6 @@ template "#{home_dir}/.ssh/authorized_keys" do
   variables :key_list => ssh_keys
 end
 
-node[:repo_data] = {}
-node[:repos].each do |bc,repos_arr|
-  node[:repo_data][bc] = []
-  repos = []
-  repos_arr.each {|repo| repos << repo.split("\n")}
-  repos.flatten.each do |repo|
-    repo_url, repo_name = repo.split
-    node[:repo_data][bc] << { repo_name => repo_url}
-  end
-end
-
 provisioner = search(:node, "roles:provisioner-server").first
 proxy_addr = provisioner[:fqdn]
 proxy_port = provisioner[:provisioner][:web_port]
@@ -72,7 +61,7 @@ proxy_port = provisioner[:provisioner][:web_port]
 node[:repo_data].each do |bc, repos|
   repos.each do |repo|
     repo.each do |repo_name, repo_url|
-      file_url = "http://#{proxy_addr}:#{proxy_port}/git_repos/#{bc}/#{repo_name}.tar.bz2"
+      file_url = "http://#{proxy_addr}:#{proxy_port}/files/git_repos/#{bc}/#{repo_name}.tar.bz2"
       file_path = "#{dst_dir}/#{bc}/#{repo_name}.tar.bz2"
       repo_dir = "#{home_dir}/#{bc}/#{repo_name}.git"
       directory "#{dst_dir}/#{bc}" do
