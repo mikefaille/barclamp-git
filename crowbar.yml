@@ -52,6 +52,6 @@ debs:
       - ruby
     build_cmd: build/build.sh
 
-git_repos:
+git:
   # this repo is for smoketests only
-  - http://github.com/MirantisDellCrowbar/barclamp-git.git git
+  - git http://github.com/MirantisDellCrowbar/barclamp-git.git
