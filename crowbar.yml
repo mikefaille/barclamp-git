@@ -50,7 +50,7 @@ debs:
   ubuntu-12.04:
     build_pkgs:
       - ruby
-    build_cmd: build.sh
+    build_cmd: build/build.sh
 
 git_repos:
   # this repo is for smoketests only

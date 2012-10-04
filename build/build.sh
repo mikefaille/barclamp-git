@@ -6,5 +6,5 @@ bc_needs_build() {
 }
 
 bc_build() {
-    $BC_DIR/git_repos.rb
+    $BC_DIR/build.rb
 }
