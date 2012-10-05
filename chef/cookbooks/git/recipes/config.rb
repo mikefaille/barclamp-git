@@ -58,9 +58,10 @@ provisioner = search(:node, "roles:provisioner-server").first
 proxy_addr = provisioner[:fqdn]
 proxy_port = provisioner[:provisioner][:web_port]
 
-node[:repo_data].each do |bc, repos|
+node[:git][:repo_data].each do |bc, repos|
   repos.each do |repo|
-    repo.each do |repo_name, repo_url|
+    repo.each do |repo_name, val|
+      repo_url = val["origin"]
       file_url = "http://#{proxy_addr}:#{proxy_port}/files/git_repos/#{bc}/#{repo_name}.tar.bz2"
       file_path = "#{dst_dir}/#{bc}/#{repo_name}.tar.bz2"
       repo_dir = "#{home_dir}/#{bc}/#{repo_name}.git"
