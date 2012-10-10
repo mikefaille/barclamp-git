@@ -2,17 +2,19 @@ define :pfs_and_install_deps, :action => :create do
 
   comp_name = params[:name]
   install_path = params[:path] || "/opt/#{comp_name}"
-  ref = params[:reference] || node[@cookbook_name][:git_refspec] 
+  cbook = params[:cookbook] || @cookbook_name
+  cnode = params[:cnode] || node
+  ref = params[:reference] || cnode[cbook][:git_refspec] 
   package("git")
   package("python-setuptools")
   package("python-pip")
-  if node[@cookbook_name][:use_gitbarclamp]
+  if cnode[cbook][:use_gitbarclamp]
     gitserver = search(:node, "roles:git").first
-    git_url = "git@#{gitserver[:fqdn]}:#{@cookbook_name}/#{comp_name}.git"
+    git_url = "git@#{gitserver[:fqdn]}:#{cbook}/#{comp_name}.git"
   else
-    git_url = node[@cookbook_name][:gitrepo]
+    git_url = cnode[cbook][:gitrepo]
   end
-  if node[@cookbook_name][:use_pip_cache]
+  if cnode[cbook][:use_pip_cache]
     provisioner = search(:node, "roles:provisioner-server").first
     proxy_addr = provisioner[:fqdn]
     proxy_port = provisioner[:provisioner][:web_port]
@@ -25,9 +27,9 @@ define :pfs_and_install_deps, :action => :create do
     reference ref
     action :sync
   end
-  if node[comp_name]
-    unless node[comp_name][:pfs_deps].nil?
-      deps = node[comp_name][:pfs_deps].dup
+  if cnode[comp_name]
+    unless cnode[comp_name][:pfs_deps].nil?
+      deps = cnode[comp_name][:pfs_deps].dup
       apt_deps = deps.dup.delete_if{|x| x.include? "pip://"}
       pip_deps = deps - apt_deps
       pip_deps.map!{|x| x.split('//').last}

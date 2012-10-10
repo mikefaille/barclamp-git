@@ -53,7 +53,3 @@ debs:
       - ruby
       - python-pip
     build_cmd: build/build.sh
-
-git:
-  # this repo is for smoketests only
-  - git http://github.com/MirantisDellCrowbar/barclamp-git.git

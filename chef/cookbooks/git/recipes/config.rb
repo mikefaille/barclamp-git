@@ -89,15 +89,19 @@ node[:git][:repo_data].each do |bc, repos|
         cwd repo_dir
         user git_username
         only_if do
-          require 'ping'
-          if repo_url.include?('@')
-            repo_host = repo_url.split('@')[1].split(':').first
+          if node[:git][:update_origins]
+            require 'ping'
+            if repo_url.include?('@')
+              repo_host = repo_url.split('@')[1].split(':').first
+            else
+              repo_host = repo_url.split('/')[2]
+            end
+            begin
+              Ping.pingecho repo_host, 5
+            rescue Exception => msg
+              false
+            end
           else
-            repo_host = repo_url.split('/')[2]
-          end
-          begin
-            Ping.pingecho repo_host, 5
-          rescue Exception => msg
             false
           end
         end
