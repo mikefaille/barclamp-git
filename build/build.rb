@@ -73,7 +73,7 @@ repo_data.each do |bc_name, repos|
      p "packing #{repo_name}.git to #{repo_name}.tar.bz2" if debug
      system "cd #{repos_path} && tar cjf #{repo_name}.tar.bz2 #{repo_name}.git/"
      p "cleaning #{repo_name}.git" if debug
-     #system "rm -fr #{repos_path}/#{repo_name}.git"
+     system "rm -fr #{repos_path}/#{repo_name}.git"
    end
   end
 end
